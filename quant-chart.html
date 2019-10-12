@@ -1,0 +1,66 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>页面行情(K线图)</title>
+  <!-- 加载资源 -->
+  <link rel="stylesheet" href="css/tools.css" />
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+
+<body>
+  <div id="kline" style="width: 900px;height:400px;position: relative;"></div>
+
+  <script src="js/jquery.min.js"></script>
+  <script src="js/quantchart.js"></script>
+  <script src="datas/datas.js"></script>
+  <script src="datas/signsDatas.js"></script>
+  <script>
+    console.log(kLines)
+    function KLineChart(divKLine) {
+      this.DivKLine = divKLine;
+      this.Chart = QTChart.Init(divKLine);   //把K线图绑定到一个Div上
+      this.Option = {
+        chartArray: [
+          {
+            name: 'kline',
+            index: 0,
+            datas: kLines,
+            cHeightRatio: 1,
+            signDatasList: signDatasList
+          }
+        ]
+      }
+
+      this.Create = function () {
+        var self = this;
+        $(window).resize(function () { self.OnSize(); self.Chart.SetOnSizeChange(); });    //绑定窗口大小变化事件
+        this.OnSize();  //让K线全屏
+        this.Chart.SetOption(this.Option);//设置K线配置
+      }
+
+      this.OnSize = function ()  //自适应大小调整
+      {
+        var height = $(window).height();
+        var width = $(window).width();
+        this.DivKLine.style.top = 'px';
+        this.DivKLine.style.left = 'px';
+        this.DivKLine.style.width = width + 'px';
+        this.DivKLine.style.height = height + 'px';
+        this.Chart.OnSize();
+      }
+    }
+
+    // jq函数，当文档载入后执行
+    $(function () {
+      var klineControl = new KLineChart(document.getElementById('kline'));
+      klineControl.Create();
+    })
+  </script>
+</body>
+
+</html>

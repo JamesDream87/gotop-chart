@@ -1,0 +1,82 @@
+body{
+    font-family:"Microsoft YaHei",Arial,Helvetica,sans-serif,"宋体";
+}
+
+.top-tool-container{
+  width: 100%;
+  background: #f2f2f2;
+  box-sizing: border-box;
+}
+.go-date-input{
+  width: 150px;
+  border-radius: 5px;
+  border: 1px solid #999;
+  padding: 5px 10px;
+}
+.jschart-drawing{
+  position: absolute;
+  z-index: 1;
+}
+.jschart-opt-drawing{
+  position: absolute;
+  z-index: 2
+}
+
+.pl{
+  padding-left: 20px
+}
+
+.pt{
+  padding-top: 20px
+}
+
+.pr{
+  padding-right: 20px
+}
+
+.pt{
+  padding-bottom: 20px
+}
+
+.pd{
+  padding: 20px
+}
+.fts-big{
+  font-size: 22px;
+}
+
+.fts_mtitle{
+  font-size: 20px;
+}
+
+.fts-title{
+  font-size: 18px;
+}
+
+.fts-stitle{
+  font-size: 16px
+}
+
+.fts-mbody{
+  font-size: 14px
+}
+
+.fts-sbody{
+  font-size: 13px
+}
+
+.fts-assist{
+  font-size: 12px
+}
+
+.ftw-b{
+  font-weight: bold
+}
+
+.color-mgreen{
+  color:#26a69a
+}
+
+.color-mred{
+  color:#ef5350
+}
