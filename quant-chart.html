@@ -18,10 +18,13 @@
   <script src="js/jquery.min.js"></script>
   <script src="js/quantchart.js"></script>
   <script src="datas/datas.js"></script>
-  <script src="datas/signsDatas.js"></script>
+  <script src="utils/indicatorFormula.js"></script>
+  <!-- <script src="datas/signsDatas.js"></script> -->
   <script>
-    console.log(kLines)
     function KLineChart(divKLine) {
+      var KDJ = hxc3.IndicatorFormula.getClass('macd');
+      var kdjIndicator = new KDJ();
+      var macdDatas = kdjIndicator.calculate(kLines);
       this.DivKLine = divKLine;
       this.Chart = QTChart.Init(divKLine);   //把K线图绑定到一个Div上
       this.Option = {
@@ -31,8 +34,23 @@
             goodsName: 'BTC/USDT',
             index: 0,
             datas: kLines,
-            cHeightRatio: 1,
-            signDatasList: signDatasList
+            cHeightRatio: 0.6,
+          }, {
+            name: 'vol',
+            index: 1,
+            datas: kLines,
+            cHeightRatio: 0.2
+          },
+          {
+            name: 'macd',
+            index: 2,
+            datas: macdDatas,
+            cHeightRatio: 0.2,
+            style: {
+              DIFF: '#fa5252',
+              DEA: '#5f5fff',
+              MACD: '#fa5252'
+            }
           }
         ]
       }
