@@ -28,7 +28,7 @@ function QTChart (divElement) {
   $("#go-date").click(
     function (e) {
       var inputText = $("#dateinput").val()
-      console.log(inputText)
+      // console.log(inputText)
       var datas = Basic.OrignDatas.kline
       if (!datas) return
       var scrollKIndex = 0
@@ -65,7 +65,7 @@ function QTChart (divElement) {
         _self.DataCurIndex = scrollKIndex
         _self.DataPreIndex = scrollKIndex - Basic.ScreenKNum + 1
       }
-      console.log('go-date', scrollKIndex, _self.DataPreIndex, _self.DataCurIndex)
+      // console.log('go-date', scrollKIndex, _self.DataPreIndex, _self.DataCurIndex)
       _self.SetUpdate()
     }
   );
@@ -197,7 +197,7 @@ function QTChart (divElement) {
   // 计算当前屏幕可容纳多少根k线
   this.CalSceenKNum = function () {
     Basic.ScreenKNum = Math.floor((Basic.width - Basic.yAxisWidth - Basic.canvasPaddingLeft) / (Basic.kLineWidth + Basic.kLineMarginRight))
-    console.log('update', Basic.width, Basic.ScreenKNum)
+    // console.log('update', Basic.width, Basic.ScreenKNum)
   }
   // 更新画布
   this.SetUpdate = function () {
@@ -232,7 +232,7 @@ function QTChart (divElement) {
     }
     this.DataPreIndex = pre
     this.DataCurIndex = cur
-    console.log(pre, cur)
+    // console.log(pre, cur)
     this.SetUpdate()
     if (pre == this.DataPreIndex || cur == this.DataCurIndex) return
   }
@@ -274,7 +274,7 @@ function QTChart (divElement) {
           this.ChartArray[i].yRange = this.volChart.Create()
           break;
         case 'macd':
-          console.log('range:', this.ChartArray[i])
+          // console.log('range:', this.ChartArray[i])
           var macdChart = new MACDChart(this.Canvas, this.ChartArray[i])
           this.macdChart = macdChart
           this.ChartArray[i].yRange = this.macdChart.Create()
@@ -315,7 +315,7 @@ function QTChart (divElement) {
     Basic.curKIndex = kn - 1
     var curKMsg = this.ChartArray[0].datas[kn - 1]
     var tw = this.OptCanvas.measureText(curKMsg.day).width
-    console.log(curKMsg.day, tw)
+    // console.log(curKMsg.day, tw)
 
     this.OptCanvas.fillStyle = '#333'
     this.OptCanvas.fillRect(x - tw / 2 - 10, Basic.height - Basic.xAxisHeight + 5, tw + 20, 15)
@@ -508,7 +508,7 @@ function KLinesChart (canvas, option) {
     h == 0 && (h = 1)
     this.Canvas.fillRect(ToFixedRect(startX), ToFixedRect(startY), ToFixedRect(endX - startX), ToFixedRect(h))
     if (close === 10688) {
-      console.log('rect', startX, endX, startY, endY)
+      // console.log('rect', startX, endX, startY, endY)
     }
     // config.basic.mainctx.setLineDash(0)
     this.Canvas.lineWidth = 1
@@ -610,7 +610,7 @@ function VolChart (canvas, option) {
     startY = this.Option.cHeight - ((vol - this.YAxisChart.MinDatas) * yNumpx) - Basic.chartPd + this.Option.cStartY
     endY = this.Option.cEndY - Basic.chartPd
     this.Canvas.fillRect(ToFixedRect(startX), ToFixedRect(startY), ToFixedRect(endX - startX), ToFixedRect(endY - startY))
-    console.log('drawvols:', startX, startY, endX - startX, endY - startY)
+    // console.log('drawvols:', startX, startY, endX - startX, endY - startY)
     this.Canvas.stroke()
     this.Canvas.closePath()
   }
@@ -754,7 +754,7 @@ function MACDChart (canvas, option) {
 
   this.DrawCurve = function (i, attrName) {
     this.StartX = Basic.canvasPaddingLeft + (Basic.kLineWidth + Basic.kLineMarginRight) * i + Basic.kLineWidth / 2 + this.Option.cStartX
-    console.log('macd:', attrName, this.Datas[i][attrName])
+    // console.log('macd:', attrName, this.Datas[i][attrName])
     if (parseFloat(this.Datas[i][attrName]) >= 0) {
       this.Option.zeroY != null ? this.StartY = this.Option.zeroY - (parseFloat(this.Datas[i][attrName]) * this.YNumpx) : this.StartY = this.Option.cEndY - (parseFloat(this.Datas[i][attrName]) * yNumpx) - Basic.chartPd
     } else {
@@ -806,7 +806,7 @@ function YAxis (canvas, option) {
     let minArray = []
     let maxArray = []
     let minData, maxData
-    console.log('range:', datas)
+    // console.log('range:', datas)
     if (datas instanceof Array) {
       for (let i in attrs) {
         minData = Math.min.apply(
@@ -830,7 +830,7 @@ function YAxis (canvas, option) {
       this.MaxDatas = Math.max.apply(
         Math, maxArray.map(function (o) { return o })
       )
-      console.log('range:', minArray, maxArray)
+      // console.log('range:', minArray, maxArray)
     } else {
       var dataArray = []
       for (var i in datas) {
@@ -862,7 +862,7 @@ function YAxis (canvas, option) {
     if (maxDataLength >= 3) {
       this.MaxDatas = Math.ceil(this.MaxDatas * fixArray[maxDataLength - 3]) / fixArray[maxDataLength - 3]
     }
-    console.log('range:', this.MinDatas, this.MaxDatas)
+    // console.log('range:', this.MinDatas, this.MaxDatas)
 
     var limit = (this.MaxDatas - this.MinDatas) / 4
     if (minDataLength > 2) {
@@ -880,7 +880,7 @@ function YAxis (canvas, option) {
       }
       this.YPoints.push(item)
     }
-    console.log('range:', this.YPoints)
+    // console.log('range:', this.YPoints)
   }
 
   this.Draw = function () {
@@ -893,7 +893,7 @@ function YAxis (canvas, option) {
     this.Canvas.font = '12px sans-serif'
     this.Canvas.fillStyle = '#333'
     for (var i in this.YPoints) {
-      console.log('yAxis', this.YPoints[i])
+      // console.log('yAxis', this.YPoints[i])
       this.Canvas.moveTo(ToFixedPoint(this.StartX), ToFixedPoint(this.YPoints[i].yPosition))
       this.Canvas.lineTo(ToFixedPoint(this.StartX + 5), ToFixedPoint(this.YPoints[i].yPosition))
       this.Canvas.fillText((this.YPoints[i].value).toFixed(2), this.StartX + 10, this.YPoints[i].yPosition + 5)
@@ -918,7 +918,7 @@ function YAxis (canvas, option) {
     this.EndX = option.cEndX
     this.EndY = option.cEndY - Basic.chartPd
     this.Datas = option.datas
-    console.log('update yaxis:', this.StartX, this.StartY, this.EndX, this.EndY, this.Datas)
+    // console.log('update yaxis:', this.StartX, this.StartY, this.EndX, this.EndY, this.Datas)
     // this.Canvas.clearRect(this.StartX, this.StartY, Basic.yAxisWidth, this.EndY - this.StartY)
     this.SetValueRange()
     this.Draw()
@@ -979,7 +979,7 @@ function XAxis (canvas, option) {
   }
 
   this.SetUpdateXAxis = function (option) {
-    console.log('update index: x')
+    // console.log('update index: x')
     this.StartX = 0
     this.StartY = Basic.height - Basic.xAxisHeight
     this.EndX = option.cEndX - Basic.yAxisWidth
