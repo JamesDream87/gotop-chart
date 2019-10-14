@@ -108,19 +108,20 @@ function QTChart (divElement) {
     this.OptCanvasElement.style.width = this.OptCanvasElement.width + 'px';
     this.OptCanvasElement.style.height = this.OptCanvasElement.height + 'px';
 
-    Basic.width = parseInt(this.CanvasElement.style.width.replace("px", ""))
-    Basic.height = parseInt(this.CanvasElement.style.height.replace("px", ""))
-
     var pixelTatio = GetDevicePixelRatio(); //获取设备的分辨率，物理像素与css像素的比值
     this.CanvasElement.height *= pixelTatio;
     this.CanvasElement.width *= pixelTatio;
     this.OptCanvasElement.height *= pixelTatio;
     this.OptCanvasElement.width *= pixelTatio;
+
+
+    Basic.width = this.CanvasElement.width
+    Basic.height = this.CanvasElement.height
   }
   // 设置配置
   this.SetOption = function (options) {
     this.ChartArray = options.chartArray.sort(sortBy('index'))
-    var canvasHeight = parseInt(this.CanvasElement.style.height.replace("px", ""))
+    var canvasHeight = Basic.height
     var addHeight = 0
     // 计算各个图表在Canvas中的位置坐标
     for (var j in this.ChartArray) {
@@ -129,7 +130,7 @@ function QTChart (divElement) {
       this.ChartArray[j].cHeight = (canvasHeight - Basic.xAxisHeight) * this.ChartArray[j].cHeightRatio
       this.ChartArray[j].cStartX = 0
       this.ChartArray[j].cStartY = addHeight
-      this.ChartArray[j].cEndX = parseInt(this.CanvasElement.style.width.replace("px", ""))
+      this.ChartArray[j].cEndX = Basic.width
       this.ChartArray[j].cEndY = this.ChartArray[j].cHeight + addHeight
       addHeight += this.ChartArray[j].cHeight
     }
@@ -141,19 +142,19 @@ function QTChart (divElement) {
   }
   // 客户端窗口改动
   this.SetOnSizeChange = function () {
-    var canvasHeight = parseInt(this.CanvasElement.style.height.replace("px", ""))
+    var canvasHeight = Basic.height
     var addHeight = 0
     for (var j in this.ChartArray) {
       this.ChartArray[j].cHeight = (canvasHeight - Basic.xAxisHeight) * this.ChartArray[j].cHeightRatio
       this.ChartArray[j].cStartX = 0
       this.ChartArray[j].cStartY = addHeight
-      this.ChartArray[j].cEndX = parseInt(this.CanvasElement.style.width.replace("px", ""))
+      this.ChartArray[j].cEndX = Basic.width
       this.ChartArray[j].cEndY = this.ChartArray[j].cHeight + addHeight
       addHeight += this.ChartArray[j].cHeight
     }
     this.CalSceenKNum()
-    this.DataPreIndex = Basic.OrignDatas.kline.length - Math.floor(Basic.ScreenKNum)
-    this.DataCurIndex = Basic.OrignDatas.kline.length - 1
+    this.DataPreIndex = this.DataCurIndex + 1 - Math.floor(Basic.ScreenKNum)
+    // this.DataCurIndex = Basic.OrignDatas.kline.length - 1
     this.SetUpdate()
   }
   // 绑定K线和信号数据，弃用
@@ -405,8 +406,7 @@ function QTChart (divElement) {
       Basic.kLineMarginRight < 2 && (Basic.kLineMarginRight = 2)
     }
     this.CalSceenKNum()
-    this.DataPreIndex = Basic.OrignDatas.kline.length - Math.floor(Basic.ScreenKNum)
-    this.DataCurIndex = Basic.OrignDatas.kline.length - 1
+    this.DataPreIndex = this.DataCurIndex + 1 - Math.floor(Basic.ScreenKNum)
     this.SetUpdate()
   }
 }
@@ -423,7 +423,7 @@ function TopToolContainer () {
     this.TopTool.style.height = '44px'
     this.TopTool.style.lineHeight = '44px'
     this.TopTool.innerHTML =
-      ' <input id="dateinput" value="2019-08-20 14:00:00" class="go-date-input" />\n' +
+      ' <input id="dateinput" value="2019-08-20T14:00:00Z" class="go-date-input" />\n' +
       ' <button id="go-date" class="go-date">跳转</button>\n'
     return this.TopTool
   }
@@ -609,7 +609,7 @@ function VolChart (canvas, option) {
     endX = startX + Basic.kLineWidth + Basic.kLineMarginRight - 1
     startY = this.Option.cHeight - ((vol - this.YAxisChart.MinDatas) * yNumpx) - Basic.chartPd + this.Option.cStartY
     endY = this.Option.cEndY - Basic.chartPd
-    this.Canvas.fillRect(startX, startY, endX - startX, endY - startY)
+    this.Canvas.fillRect(ToFixedRect(startX), ToFixedRect(startY), ToFixedRect(endX - startX), ToFixedRect(endY - startY))
     console.log('drawvols:', startX, startY, endX - startX, endY - startY)
     this.Canvas.stroke()
     this.Canvas.closePath()
@@ -799,7 +799,6 @@ function YAxis (canvas, option) {
   }
 
   this.SetValueRange = function () {
-
     this.YPoints = []
     // 处理两种数据类型
     let datas = this.Datas
@@ -847,7 +846,7 @@ function YAxis (canvas, option) {
       )
     }
 
-    var fixArray = [0.1, 0.01, 0.001, 0.0001, 0.00001, 0.000001, 0.0000001]
+    var fixArray = [1, 0.1, 0.01, 0.001, 0.0001, 0.00001, 0.000001]
     // 判断值是否大于等于6位数，是的话 以 k 为单位
     if (((Math.ceil(this.MaxDatas)).toString().length) >= 6) {
       this.isBigNum = true
